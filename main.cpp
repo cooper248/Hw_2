@@ -1,3 +1,11 @@
+//
+//  main.cpp
+//  Hw_2
+//
+//  Created by Cooper Richardson on 2/27/17.
+//  Copyright © 2017 Cooper Richardson. All rights reserved.
+//
+
 #include <iostream>
 #include <fstream>
 #include <assert.h>
@@ -26,7 +34,7 @@ void createGrid(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* pWid
     cout<< endl;
     
     // Create gridworld given user inputs
-    char placeHolder= '-';
+    char placeHolder= ' ';
     for(int i=0;i<*pWidth;i++){
         for(int j=0;j<*pHeight;j++){
             pDepth->push_back(placeHolder);
@@ -86,7 +94,7 @@ void initializeStart( vector<vector<char>>* pFullGrid, vector<char>* pDepth, int
 
 
 int lawnMowerTestC(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* pWidth, int* pHeight , int* agentLocY, int* agentLocX, int* goalLocY, int* goalLocX){
-    char placeHolder= '-';
+    char placeHolder= ' ';
     
     // Continue iteration until the bottom of the grid is reached
     while(*agentLocY!=*pHeight-1){
