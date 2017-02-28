@@ -1,10 +1,3 @@
-//
-//  main.cpp
-//  Hw_2
-//
-//  Created by Cooper Richardson on 2/27/17.
-//  Copyright © 2017 Cooper Richardson. All rights reserved.
-//
 #include <iostream>
 #include <fstream>
 #include <assert.h>
@@ -25,7 +18,7 @@ void createGrid(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* pWid
     srand(time(NULL));
     
     // Input length and width of gridworld from user
-cout<<"How wide would you like your grid to be? ";
+    cout<<"How wide would you like your grid to be? ";
     cin>>*pWidth;
     cout<< endl;
     cout<<"How tall would you like your grid to be? ";
@@ -50,7 +43,7 @@ cout<<"How wide would you like your grid to be? ";
     *goalLocX= rand()% *pWidth;
     pFullGrid->at(*goalLocX)[*goalLocY]='G';
     
-        // If agent and goal are in same location, relocate
+    // If agent and goal are in same location, relocate
     while( *agentLocY == *goalLocY && *agentLocX == *goalLocX ){
         *agentLocY = rand()%*pHeight;
         *agentLocX = rand()% *pWidth;
@@ -66,16 +59,6 @@ void printGrid(vector<vector<char>>* pFullGrid, int* pWidth, int* pHeight){
     for(int i=0;i<*pHeight;i++){
         for(int j=0;j<*pWidth;j++){
             cout<<pFullGrid->at(j)[i]<<" ";
-        }
-        cout<<endl;
-    }
-};
-
-void printGrid2(vector<vector<char>>fullGrid, int Width, int Height){
-    
-    for(int i=0;i<Height;i++){
-        for(int j=0;j<Width;j++){
-            cout<<fullGrid.at(j)[i]<<" ";
         }
         cout<<endl;
     }
@@ -102,7 +85,7 @@ void initializeStart( vector<vector<char>>* pFullGrid, vector<char>* pDepth, int
 };
 
 
-int lawnMowerCheck(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* pWidth, int* pHeight , int* agentLocY, int* agentLocX, int* goalLocY, int* goalLocX){
+int lawnMowerTestC(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* pWidth, int* pHeight , int* agentLocY, int* agentLocX, int* goalLocY, int* goalLocX){
     char placeHolder= '-';
     
     // Continue iteration until the bottom of the grid is reached
@@ -116,7 +99,8 @@ int lawnMowerCheck(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* p
                 *agentLocX=*agentLocX+1;
                 
                 if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
-                cout<<"Congratulations, the agent found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                    assert(*agentLocX==*goalLocX && *agentLocY==*goalLocY);
+                    cout<<"Congratulations, the agent found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
                     
                     // reprint grid given that the agent hopefully found goal
                     pFullGrid->clear();
@@ -133,7 +117,7 @@ int lawnMowerCheck(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* p
                     break;
                 }
             }
-        
+            
         }
         
         //check to see if agent is all the way right
@@ -143,8 +127,10 @@ int lawnMowerCheck(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* p
             while(*agentLocX!=0){
                 *agentLocX=*agentLocX-1;
                 
+                
                 if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
-                cout<<"Congratulations, the agent found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                    assert(*agentLocX==*goalLocX && *agentLocY==*goalLocY);
+                    cout<<"Congratulations, the agent found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
                     
                     // reprint grid given that the agent hopefully found goal
                     pFullGrid->clear();
@@ -168,15 +154,15 @@ int lawnMowerCheck(vector<vector<char>>* pFullGrid, vector<char>* pDepth, int* p
     return 0;
 };
 
-int userPlay(vector<vector<char>>* pFullGrid, int* pWidth, int* pHeight , int* agentLocY, int* agentLocX, int* goalLocY, int* goalLocX){
+int userPlayTestB(vector<vector<char>>* pFullGrid, int* pWidth, int* pHeight , int* agentLocY, int* agentLocX, int* goalLocY, int* goalLocX){
     char movement;
     
-    while(*agentLocX!=*goalLocX && *agentLocY!=*goalLocY){
-        cout<<"Which way would you like to move? w = up, s = down, a = left, d = right."<<endl;
+    while(*agentLocX!=*goalLocX || *agentLocY!=*goalLocY){
+        cout<<"Which way would you like to move? w = up, s = down, a = left, d = right."<<endl<<"If you'd like to test Test A, feel free to try to go past the wall... you ain't goin' nowhere. "<<endl;
         cin>>movement;
         if(movement=='w'){
             if(*agentLocY==0){
-                cout<<"No movement, try again. "<<endl;
+                cout<<"No movement. Test A validated. Try again. "<<endl;
             }
             else{
                 //replace old location with place
@@ -187,21 +173,21 @@ int userPlay(vector<vector<char>>* pFullGrid, int* pWidth, int* pHeight , int* a
                 
                 // replace new location with 'A'
                 pFullGrid->at(*agentLocX)[*agentLocY]='A';
-                //printGrid(pFullGrid, pWidth, pHeight);
-               }
-            
-            // check agent location against goal and output success
-            if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
-                cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                printGrid(pFullGrid, pWidth, pHeight);
                 
-                return 1000;
-                break;
+                // check agent location against goal and output success
+                if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
+                    cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                    
+                    return 1000;
+                    break;
+                }
             }
-
+            
         }
         else if(movement=='s'){
             if(*agentLocY==*pHeight-1){
-                cout<<"No movement, try again. "<<endl;
+                cout<<"No movement. Test A validated. Try again. "<<endl;
             }
             else{
                 //replace old location with place
@@ -212,76 +198,79 @@ int userPlay(vector<vector<char>>* pFullGrid, int* pWidth, int* pHeight , int* a
                 
                 // replace new location with 'A'
                 pFullGrid->at(*agentLocX)[*agentLocY]='A';
-                //printGrid(pFullGrid, pWidth, pHeight);
+                printGrid(pFullGrid, pWidth, pHeight);
+                
+                // check agent location against goal and output success
+                if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
+                    cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                    
+                    return 1000;
+                    break;
+                }
             }
             
-            // check agent location against goal and output success
-            if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
-                cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
-                
-                return 1000;
-                break;
-            }
-        
         }
         else if(movement=='a'){
             if(*agentLocX==0){
-                cout<<"No movement, try again. "<<endl;
+                cout<<"No movement. Test A validated. Try again. "<<endl;
             }
             else{
                 //replace old location with place
                 pFullGrid->at(*agentLocX)[*agentLocY]='-';
                 
                 // update angent location
-                *agentLocY=*agentLocX-1;
+                *agentLocX=*agentLocX-1;
                 
                 // replace new location with 'A'
                 pFullGrid->at(*agentLocX)[*agentLocY]='A';
-               // printGrid(pFullGrid, pWidth, pHeight);
-            }
-            
-            // check agent location against goal and output success
-            if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
-                cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                printGrid(pFullGrid, pWidth, pHeight);
                 
-                return 1000;
-                break;
+                // check agent location against goal and output success
+                if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
+                    cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                    
+                    return 1000;
+                    break;
+                }
             }
             
         }
         else if(movement=='d'){
             if(*agentLocX==*pWidth-1){
-                cout<<"No movement, try again. "<<endl;
+                cout<<"No movement. Test A validated. Try again. "<<endl;
             }
             else{
                 //replace old location with place
                 pFullGrid->at(*agentLocX)[*agentLocY]='-';
                 
                 // update angent location
-                *agentLocY=*agentLocX+1;
+                *agentLocX=*agentLocX+1;
                 
                 // replace new location with 'A'
                 pFullGrid->at(*agentLocX)[*agentLocY]='A';
-                //printGrid(pFullGrid, pWidth, pHeight);
-            }
-            
-            // check agent location against goal and output success
-            if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
-                cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                printGrid(pFullGrid, pWidth, pHeight);
                 
-                return 1000;
-                break;
+                // check agent location against goal and output success
+                if(*agentLocX==*goalLocX && *agentLocY==*goalLocY){
+                    cout<<"Congratulations, you found the goal at ("<< *agentLocX+1 <<","<<*pHeight-*agentLocY<<")"<<endl;
+                    
+                    return 1000;
+                    break;
+                }
+                
             }
             
         }
-    
+        
     }
     return 0;
 };
 
 
-int main() {
 
+
+int main() {
+    
     vector<vector<char>> fullGrid;
     vector<char> depth;
     int gridWidth;
@@ -295,49 +284,50 @@ int main() {
     
     
     while(check !='n'){
-    createGrid(&fullGrid, &depth, &gridWidth, &gridHeight, &agentLocY, &agentLocX, &goalLocY, &goalLocX);
-    printGrid(&fullGrid, &gridWidth, &gridHeight);
+        createGrid(&fullGrid, &depth, &gridWidth, &gridHeight, &agentLocY, &agentLocX, &goalLocY, &goalLocX);
+        printGrid(&fullGrid, &gridWidth, &gridHeight);
         cout<<endl<<"Agent Y location: "<<gridHeight-agentLocY<<" Agent X location: "<<agentLocX +1<<endl<<endl;
-        fullGrid.clear();
         
         cout<<"Would you like to test another grid? Come on... make it more difficult. (y/n) ";
         cin>>check;
         cout<<endl;
+        if(check=='y'||check=='Y'){
+            fullGrid.clear();
+        }
     }
-    
     cout<<"Would you like the computer to find the goal? Press 'C'. "<< endl; cout<<"Or would you like to give it a try? Press 'U'."<<endl<<"Or would you like to exit the program? Enter 'N'."<<endl<< "enter C U or N: ";
     cin>>check2;
     cout<<endl;
     
     while(check2 != 'n' || check2 != 'N'){
-    
-    if(check2 =='C' || check2 =='c'){
-    initializeStart(&fullGrid, &depth, &gridWidth, &gridHeight, &agentLocY, &agentLocX, &goalLocY, &goalLocX);
-    lawnMowerCheck(&fullGrid, &depth, &gridWidth, &gridHeight , &agentLocY, &agentLocX, &goalLocY, &goalLocX);
-    printGrid(&fullGrid, &gridWidth, &gridHeight);
-        return 0;
-    }
-    
-    else if(check2 =='u' || check2 =='U'){
-    userPlay(&fullGrid, &gridWidth, &gridHeight ,&agentLocY, &agentLocX, &goalLocY, &goalLocX);
-        return 0;
-    }
         
-    else if (check2=='n'||check2=='N'){
-        return 0;
-    }
-
-    else{
-        cout<<"Sorry, that was an invalid key, please try again. Enter 'U' or 'C', or if you're trying to quit, press 'N'. ";
-        cin>>check2;
-        cout<<endl;
-        if(check2=='n'||check2=='N'){
+        if(check2 =='C' || check2 =='c'){
+            initializeStart(&fullGrid, &depth, &gridWidth, &gridHeight, &agentLocY, &agentLocX, &goalLocY, &goalLocX);
+            lawnMowerTestC(&fullGrid, &depth, &gridWidth, &gridHeight , &agentLocY, &agentLocX, &goalLocY, &goalLocX);
+            printGrid(&fullGrid, &gridWidth, &gridHeight);
             return 0;
         }
-    }
-
+        
+        else if(check2 =='u' || check2 =='U'){
+            userPlayTestB(&fullGrid, &gridWidth, &gridHeight ,&agentLocY, &agentLocX, &goalLocY, &goalLocX);
+            return 0;
+        }
+        
+        else if (check2=='n'||check2=='N'){
+            return 0;
+        }
+        
+        else{
+            cout<<"Sorry, that was an invalid key, please try again. Enter 'U' or 'C', or if you're trying to quit, press 'N'. ";
+            
+            cin>>check2;
+            cout<<endl;
+            if(check2=='n'||check2=='N'){
+                return 0;
+            }
+        }
+        
     }
     return 0;
 }
-
 
